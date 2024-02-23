@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+   {% if category %}
+      {{ category.description|truncatewords:155 }}
+   {% else %}
+       welcome to store where you can experience different tastes....
+   {% endif %}
+{% endblock %}
+{% block title %}
+    {% if category %}
+        {{ category.name }} -  Borcelle
+    {% else %}
+         see our new collections - cakeology
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+      <div>
+        <div class="row my_row_class">
+            <div >
+            <p class="text-center custom_a" ><a href="{% url 'ecom_app:allProdCat' %}" class="custom_a" style="color:black;">Our product collections</a> </p>
+        </div>
+            </div>
+      </div>
+    {% endif %}
+      <div class="mx_auto">
+    {% if category %}
+            <img class="my_image1" src="{{category.image.url}}" alt="{{category.name}}">
+      </div>
+      <br>
+      <div>
+             <h1 class="text-center my_title"><b>{{category.name}}</b></h1>
+             <p class="text-center">{{category.description}}</p>
+      </div>
+    {% else %}
+      <div>
+           <img  class="my_image1 my_image_padding" src="{% static 'img/banner102.jpg' %}" alt="our products" width="100%" height="100px">
+      </div>
+      <br>
+      <div>
+         <h1 class="text-center my_title">Our products collections </h1>
+         <p class="text-center">perfect balance of sweetness and a satisfying texture. Whether it's a classic chocolate cake, a decadent red velvet, or a fruity sponge, a delicious cake should leave you wanting more with every bite.</p>
+      </div>
+    {% endif %}
+      <div class="container">
+      <div class="row mx_auto">
+        {% for product in products.object_list %}
+           <div class="my_bottom_margin col-9 col-sm-4 col-md-4 xol-lg-4">
+           <div class="card text-center"  style="min-width:18rem;">
+             <a href="{{product.get_url}}"><img class="card-img-top my_image" src="{{product.image.url}}" style="width:335px;height:350px;margin-top:10px;" alt="{{product.name}}"></a>
+           <div class="card-body">
+             <h4>{{product.name}}</h4>
+             <p>{{product.price}}</p>
+           </div>
+           </div>
+           </div>
+        {% endfor %}
+      </div>
+          <div class="mx-auto">
+              {% if products.paginator.num_pages > 1 %}
+              <hr>
+              <div class="text-center">
+                  {% for pg in products.paginator.page_range %}
+                  <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} active {% endif %}">{{pg}}</a>
+                  {% endfor %}
+              </div>
+              {% endif %}
+          </div>
+          <br>
+      </div>
+{% endblock %}
+
+
